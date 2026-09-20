@@ -1,5 +1,4 @@
-# Uber
-# Uber Data Analysis 🚗📊
+# Uber Data Analysis 📊
 
 An exploratory data analysis project focused on understanding Uber ride patterns, demand trends, trip characteristics, and time-based usage behavior using Python and data visualization.
 
