@@ -1,152 +1,91 @@
-# Uber Data Analysis 📊
+# Uber Data Analysis — New York City, 2014
 
-An exploratory data analysis project focused on understanding Uber ride patterns, demand trends, trip characteristics, and time-based usage behavior using Python and data visualization.
+This repository contains my analysis of Uber pickups in New York City from April through September 2014. I combined the six monthly files and examined when pickups happened, how activity changed month to month, and how pickups were distributed across the five dispatch bases.
 
-## 📌 Project Overview
+The analysis is in **Uber data analysis.ipynb**. The raw files are large, so a setup script downloads the five missing months from the original FiveThirtyEight dataset. The April file already in the repository is reused.
 
-This project analyzes an Uber rides dataset to identify meaningful patterns in ride demand and trip activity.
+## Dataset
 
-The analysis focuses on questions such as:
+Source: [FiveThirtyEight — Uber TLC FOIL Response](https://github.com/fivethirtyeight/uber-tlc-foil-response). The pickup data was supplied to FiveThirtyEight by the New York City Taxi and Limousine Commission.
 
-* When is Uber demand the highest?
-* Which days and hours have the most rides?
-* How does ride demand vary across different months?
-* What are the most common pickup locations?
-* How do ride patterns change throughout the day?
-* What trends can be observed from the overall trip distribution?
+The project uses the six monthly CSVs for April–September 2014. Each file contains:
 
-The project uses **Python, Pandas, Matplotlib, and Seaborn** to clean, analyze, and visualize the data.
+| Column | Meaning |
+|---|---|
+| Date/Time | Pickup date and time |
+| Lat | Pickup latitude |
+| Lon | Pickup longitude |
+| Base | TLC base code affiliated with the pickup |
 
-## 🛠️ Tech Stack
+The six files contain **4,534,327 pickup records**. These are pickup-level records; they do not include fares, destinations, passenger counts, or trip duration.
 
-* **Python**
-* **Pandas** — Data cleaning and manipulation
-* **NumPy** — Numerical operations
-* **Matplotlib** — Data visualization
-* **Seaborn** — Statistical visualization
-* **Jupyter Notebook** — Interactive analysis
+## Run the project
 
-## 📂 Project Structure
+Use Python 3.9 or later.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Akshay270406/Uber-Data-Analysis.git
+   cd Uber-Data-Analysis
+   ```
+2. Install dependencies:
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+3. Download the missing monthly files:
+   ```bash
+   python download_data.py
+   ```
+   The script puts all six CSVs in data/raw/. It reuses the April CSV already in the repository and downloads May–September from a pinned FiveThirtyEight source revision. Use --force to download the files again.
+4. Start Jupyter:
+   ```bash
+   jupyter notebook
+   ```
+   Open **Uber data analysis.ipynb** and run the cells from top to bottom.
+
+The notebook reads files from data/raw/. It no longer depends on a local shapefile path; the geographic view is plotted directly from pickup coordinates.
+
+## Analysis performed
+
+- Loaded and concatenated the six monthly CSVs.
+- Converted pickup timestamps to datetime and derived date, month, weekday, and hour fields.
+- Checked the combined dataset's dimensions, data types, missing values, duplicate rows, and dispatch-base counts.
+- Compared pickup totals by month, weekday, and hour.
+- Examined monthly patterns by hour and weekday using heatmaps.
+- Compared dispatch-base volumes overall and by month.
+- Plotted a sample of pickup coordinates to inspect their geographic spread.
+
+Row counts use len(data) or data.shape[0]. DataFrame.size counts all cells (rows multiplied by columns), so it should not be used when the intended metric is number of pickup records.
+
+## Findings from the six-month data
+
+- **4,534,327 pickups** across April–September 2014.
+- Monthly volume increased from **564,516 in April** to **1,028,136 in September**, an **82.13%** increase between those months.
+- **Thursday** had the highest weekday total (**755,145**), followed by **Friday (741,139)**. Sunday had the lowest (**490,180**).
+- The busiest pickup hour was **17:00 (5 PM)** with **336,190** pickups. The lowest was **02:00 (2 AM)** with **45,865**.
+- The three largest dispatch bases were **B02617 (1,458,853)**, **B02598 (1,393,113)**, and **B02682 (1,212,789)**. Together they account for approximately **89.64%** of records.
+
+These are raw totals over the period, not per-day averages. Months have different numbers of days, so monthly totals should not be interpreted as daily rates without normalizing by the number of days.
+
+## Repository files
 
 ```text
 Uber-Data-Analysis/
-│
-├── Uber Data Analysis.ipynb
-├── UberDataset.csv
-└── README.md
+├── Uber data analysis.ipynb
+├── README.md
+├── requirements.txt
+├── download_data.py
+├── uber-raw-data-apr14.csv
+└── data/
+    └── raw/  (created by download_data.py; downloaded CSVs are not committed)
 ```
 
-## 🔍 Analysis Performed
+The full raw dataset is roughly 200 MB. The downloaded CSVs are kept out of Git to avoid committing multiple large copies; the setup script makes a fresh clone reproducible.
 
-### 1. Data Cleaning & Preprocessing
+## Interpretation notes
 
-* Loaded the Uber dataset using Pandas
-* Examined dataset structure and data types
-* Identified and handled missing values
-* Converted date/time information into useful analytical features
-* Extracted attributes such as:
+The analysis is descriptive. It identifies pickup-volume patterns but does not establish why demand changes, measure driver supply, or estimate causal effects. The coordinate plot shows pickup points, not official borough boundaries. The notebook does not establish a general Saturday-night surge in Lower Manhattan.
 
-  * Hour
-  * Day
-  * Month
-  * Day of Week
+## Source
 
-### 2. Exploratory Data Analysis
-
-Analyzed ride distributions across different dimensions:
-
-* Hourly ride demand
-* Daily ride demand
-* Monthly ride demand
-* Weekday vs. weekend activity
-* Ride frequency by pickup location
-* Time-based demand patterns
-
-### 3. Data Visualization
-
-Created visualizations to identify trends and patterns, including:
-
-* Bar charts
-* Histograms
-* Count plots
-* Time-based distribution plots
-* Heatmaps
-
-These visualizations make it easier to understand changes in Uber usage throughout the day, week, and year.
-
-## 📈 Key Insights
-
-The analysis highlights several patterns in Uber usage:
-
-* Ride demand varies significantly throughout the day.
-* Certain hours experience considerably higher ride activity than others.
-* Weekday and weekend usage exhibit different demand patterns.
-* Ride activity changes across different months.
-* A relatively small set of pickup locations accounts for a significant portion of overall rides.
-* Time-based features such as **hour, weekday, and month** provide useful signals for understanding ride demand.
-
-## 🚀 How to Run
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Akshay270406/Uber-Data-Analysis.git
-```
-
-### 2. Navigate to the project
-
-```bash
-cd Uber-Data-Analysis
-```
-
-### 3. Install dependencies
-
-```bash
-pip install pandas numpy matplotlib seaborn jupyter
-```
-
-### 4. Launch Jupyter Notebook
-
-```bash
-jupyter notebook
-```
-
-Open:
-
-```text
-Uber Data Analysis.ipynb
-```
-
-and run the cells sequentially.
-
-## 💡 Skills Demonstrated
-
-This project demonstrates practical experience with:
-
-* Data preprocessing
-* Exploratory Data Analysis (EDA)
-* Feature extraction
-* Data manipulation using Pandas
-* Statistical visualization
-* Identifying trends from real-world datasets
-* Presenting analytical findings through visualizations
-
-## 🔮 Future Improvements
-
-Potential extensions include:
-
-* Building an interactive dashboard using **Power BI**
-* Performing more advanced statistical analysis
-* Building a ride-demand prediction model
-* Applying machine learning for demand forecasting
-* Analyzing geographical patterns using latitude/longitude data
-* Developing an interactive web dashboard for real-time exploration
-
-## 👨‍💻 Author
-
-**Akshay Kumar Yadavalli**
-
-Mechanical Engineering
-Indian Institute of Technology Indore
-
-GitHub: [Akshay270406](https://github.com/Akshay270406)
+[FiveThirtyEight Uber TLC FOIL Response — pinned source revision](https://github.com/fivethirtyeight/uber-tlc-foil-response/tree/63bb878b76f47f69b4527d50af57aac26dead983/uber-trip-data).
