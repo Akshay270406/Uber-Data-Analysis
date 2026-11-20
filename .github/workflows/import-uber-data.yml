@@ -1,0 +1,46 @@
+name: Import Uber 2014 CSV data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/import-uber-data.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  import-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download the five missing monthly files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/raw
+          base="https://raw.githubusercontent.com/fivethirtyeight/uber-tlc-foil-response/63bb878b76f47f69b4527d50af57aac26dead983/uber-trip-data"
+          for month in may jun jul aug sep; do
+            file="uber-raw-data-${month}14.csv"
+            curl --fail --location --retry 4 --retry-delay 3 --output "data/raw/${file}" "${base}/${file}"
+            test -s "data/raw/${file}"
+            echo "Downloaded ${file}: $(wc -c < "data/raw/${file}") bytes"
+          done
+
+      - name: Commit datasets and remove temporary workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/raw/*.csv
+          rm .github/workflows/import-uber-data.yml
+          git add -u .github/workflows/import-uber-data.yml
+          git commit -m "Add remaining Uber NYC 2014 monthly datasets"
+          git push
