@@ -32,13 +32,7 @@ Use Python 3.9 or later.
    ```bash
    python -m pip install -r requirements.txt
    ```
-3. Place the six source CSV files in `data/raw/`:
-   - `uber-raw-data-apr14.csv`
-   - `uber-raw-data-may14.csv`
-   - `uber-raw-data-jun14.csv`
-   - `uber-raw-data-jul14.csv`
-   - `uber-raw-data-aug14.csv`
-   - `uber-raw-data-sep14.csv`
+3. The six monthly CSV files are already included in `data/raw/`; no separate data download is required.
 4. Start Jupyter:
    ```bash
    jupyter notebook
