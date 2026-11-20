@@ -2,7 +2,7 @@
 
 This repository contains my analysis of Uber pickups in New York City from April through September 2014. I combined the six monthly files and examined when pickups happened, how activity changed month to month, and how pickups were distributed across the five dispatch bases.
 
-The analysis is in **Uber data analysis.ipynb**. The raw files are large, so a setup script downloads the five missing months from the original FiveThirtyEight dataset. The April file already in the repository is reused.
+The analysis is in **Uber data analysis.ipynb**. The notebook expects the six monthly CSV files to be stored together in `data/raw/`. The original source is FiveThirtyEight's public Uber TLC FOIL dataset.
 
 ## Dataset
 
@@ -32,11 +32,13 @@ Use Python 3.9 or later.
    ```bash
    python -m pip install -r requirements.txt
    ```
-3. Download the missing monthly files:
-   ```bash
-   python download_data.py
-   ```
-   The script puts all six CSVs in data/raw/. It reuses the April CSV already in the repository and downloads May–September from a pinned FiveThirtyEight source revision. Use --force to download the files again.
+3. Place the six source CSV files in `data/raw/`:
+   - `uber-raw-data-apr14.csv`
+   - `uber-raw-data-may14.csv`
+   - `uber-raw-data-jun14.csv`
+   - `uber-raw-data-jul14.csv`
+   - `uber-raw-data-aug14.csv`
+   - `uber-raw-data-sep14.csv`
 4. Start Jupyter:
    ```bash
    jupyter notebook
@@ -74,13 +76,17 @@ Uber-Data-Analysis/
 ├── Uber data analysis.ipynb
 ├── README.md
 ├── requirements.txt
-├── download_data.py
-├── uber-raw-data-apr14.csv
 └── data/
-    └── raw/  (created by download_data.py; downloaded CSVs are not committed)
+    └── raw/
+        ├── uber-raw-data-apr14.csv
+        ├── uber-raw-data-may14.csv
+        ├── uber-raw-data-jun14.csv
+        ├── uber-raw-data-jul14.csv
+        ├── uber-raw-data-aug14.csv
+        └── uber-raw-data-sep14.csv
 ```
 
-The full raw dataset is roughly 200 MB. The downloaded CSVs are kept out of Git to avoid committing multiple large copies; the setup script makes a fresh clone reproducible.
+The six monthly CSVs are the input files required by the notebook.
 
 ## Interpretation notes
 
