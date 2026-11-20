@@ -1,5 +1,4 @@
 # Downloaded raw data (about 200 MB across six monthly files)
-data/raw/*.csv
 data/raw/*.part
 
 # Notebook and Python generated files
