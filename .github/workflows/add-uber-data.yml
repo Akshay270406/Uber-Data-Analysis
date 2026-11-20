@@ -26,7 +26,21 @@ jobs:
             file="uber-raw-data-${month}14.csv"
             curl -fL --retry 5 --retry-delay 2 "${base}/${file}" -o "data/raw/${file}"
             test -s "data/raw/${file}"
-            head -n 1 "data/raw/${file}" | grep -q '^Date/Time,Lat,Lon,Base$'
+            head -n 1 "data/raw/${file}" | grep -Eq '^(\"Date/Time\",\"Lat\",\"Lon\",\"Base\"|Date/Time,Lat,Lon,Base)
+            echo "${file}: $(wc -l < "data/raw/${file}") lines"
+          done
+      - name: Commit the datasets and remove this one-time workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/raw/*.csv
+          rm .github/workflows/add-uber-data.yml
+          git add -u .github/workflows/add-uber-data.yml
+          git commit -m "Add May–September 2014 Uber pickup data"
+          git push
+
             echo "${file}: $(wc -l < "data/raw/${file}") lines"
           done
       - name: Commit the datasets and remove this one-time workflow
