@@ -1,0 +1,11 @@
+# Downloaded raw data (about 200 MB across six monthly files)
+data/raw/*.csv
+data/raw/*.part
+
+# Notebook and Python generated files
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+
+# Generated exports and plots
+outputs/
